@@ -1,8 +1,18 @@
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, Text
+
+from app.core.db import Base
 
 
-class Donation():
+class Donation(Base):
+    user_id = Column(Integer, ForeignKey('user.id'))
+    comment = Column(Text)
+    full_amount = Column(Integer, nullable=False)
+    invested_amount = Column(Integer, default=0)
+    fully_invested = Column(Boolean, default=False)
+    create_date = Column(DateTime)
+    close_date = Column(DateTime)
+
     """
-    id — первичный ключ;
     user_id — id пользователя, сделавшего пожертвование. Foreign Key на поле user.id из таблицы пользователей;
     comment — необязательное текстовое поле;
     full_amount — сумма пожертвования, целочисленное поле; больше 0;
