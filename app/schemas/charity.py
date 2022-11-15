@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from pydantic import BaseModel, Field, PositiveInt
 
 
@@ -9,19 +7,19 @@ class CharityBase(BaseModel):
     full_amount: PositiveInt
 
 
-class CharityCreate(CharityBase):
+class CharityProjectCreate(CharityBase):
     pass
 
 
-class CharityUpdate(CharityBase):
+class CharityProjectUpdate(CharityBase):
     pass
 
 
-class CharityDB(CharityBase):
+class CharityProjectDB(CharityBase):
     id: int
     invested_amount: int = 0
     fully_invested: bool = False
-    create_date: datetime = datetime.now()
+    create_date: datetime
     close_date: datetime
 
     class Config:
