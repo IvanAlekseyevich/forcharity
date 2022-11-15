@@ -7,7 +7,7 @@ class Setting(BaseModel):
     database_url: str
     hash_gen_key: str = 'Secret'
 
-    class Config():
+    class Config:
         env_file = '.env'
 
 
