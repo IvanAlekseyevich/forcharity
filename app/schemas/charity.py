@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, PositiveInt, validator
+from pydantic import BaseModel, Field, PositiveInt
 
 
 class CharityBase(BaseModel):
@@ -12,11 +12,7 @@ class CharityProjectCreate(CharityBase):
 
 
 class CharityProjectUpdate(CharityBase):
-    @validator('name')
-    def name_update(cls, value):
-        if value is None:
-            raise ValueError('Имя проекта не может быть пустым')
-        return value
+    pass
 
 
 class CharityProjectDB(CharityBase):
@@ -24,7 +20,7 @@ class CharityProjectDB(CharityBase):
     invested_amount: int = 0
     fully_invested: bool = False
     create_date: datetime
-    close_date: datetime
+    close_date: datetime = None
 
     class Config:
         orm_mode = True
