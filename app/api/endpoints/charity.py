@@ -10,6 +10,7 @@ from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity import charity_crud
 from app.schemas.charity import CharityProjectDB, CharityProjectCreate, CharityProjectUpdate
+from app.services.investing import invest_charity
 
 router = APIRouter()
 
@@ -41,6 +42,7 @@ async def create_new_charity(
     """
     await check_name_duplicate(charity.name, session)  # Проверка дубликата названия
     new_charity = await charity_crud.create(charity, session)  # Создание проекта
+    new_charity = await invest_charity(new_charity, session)  # Процесс инвестирования
     return new_charity
 
 
