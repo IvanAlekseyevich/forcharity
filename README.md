@@ -29,7 +29,7 @@ HASH_GEN_KEY=      # Ключ для генерации хэша
 
 - Установите зависимости
 
-- Создайте миграции (при необходимости)
+- Создайте миграции
 
 ```shell
 alembic revision --autogenerate -m "First migration" 
