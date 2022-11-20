@@ -18,6 +18,7 @@ class DonationDB(DonationBase):
 
 
 class DonationAdminDB(DonationBase):
+    id: int
     create_date: datetime
     user_id: int
     invested_amount: int = 0
