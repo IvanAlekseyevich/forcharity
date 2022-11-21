@@ -4,85 +4,83 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.validators import (
-    check_name_duplicate, check_charity_exists, check_charity_close, check_charity_donations
+    check_name_duplicate, check_project_exists, check_project_close, check_project_donations
 )
 from app.core.db import get_async_session
 from app.core.user import current_superuser
-from app.crud.charity import charity_crud
-from app.schemas.charity import CharityProjectDB, CharityProjectCreate, CharityProjectUpdate
-from app.services.investing import invest_charity
+from app.crud.charity import charity_project_crud
+from app.schemas.charity import CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
 
 router = APIRouter()
 
 
 @router.get(
     '/',
-    response_model=List[CharityProjectDB],  # Схема возврата всех проектов
+    response_model=List[CharityProjectDB],
 )
-async def get_all_charity(
+async def get_all_charity_projects(
         session: AsyncSession = Depends(get_async_session),
 ):
     """Получает список всех проектов"""
-    all_charity = await charity_crud.get_multi(session)  # Запрос всех проектов
-    return all_charity
+    all_projects = await charity_project_crud.get_multi(session)
+    return all_projects
 
 
 @router.post(
     '/',
-    response_model=CharityProjectDB,  # Схема ответа
-    dependencies=[Depends(current_superuser)],  # Разрешить создание только суперюзером
-)
-async def create_new_charity(
-        charity=CharityProjectCreate,  # Схема создания проекта
-        session: AsyncSession = Depends(get_async_session),
-):
-    """
-    Только для суперюзеров.
-    Создает благотворительный проект.
-    """
-    await check_name_duplicate(charity.name, session)  # Проверка дубликата названия
-    new_charity = await charity_crud.create(charity, session)  # Создание проекта
-    new_charity = await invest_charity(new_charity, session)  # Процесс инвестирования
-    return new_charity
-
-
-@router.patch(
-    '/charity_id',
-    response_model=CharityProjectDB,  # Схема возврата данных
-    dependencies=[Depends(current_superuser)],  # Только для суперюзеров
-)
-async def partially_update_charity(
-        charity_id=int,  # id проекта
-        charity_obj=CharityProjectUpdate,  # Схема обновления проекта
-        session: AsyncSession = Depends(get_async_session),
-):
-    """
-    Только для суперюзеров.
-    Закрытый проект нельзя редактировать, также нельзя установить требуемую сумму меньше уже вложенной.
-    """
-    charity = await check_charity_exists(charity_id, session)  # Проверка существования проекта
-    if charity_obj.name is not None:
-        await check_charity_close(charity)  # Проверка закрыт ли проект
-        await check_charity_donations(charity)  # Проверка задоначенной суммы в проект
-        await check_name_duplicate(charity_obj.name, session)  # Проверка на дубликат имени
-    charity = await charity_crud.update(charity, charity_obj, session)
-    return charity
-
-
-@router.delete(
-    '/charity_id',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
 )
-async def remove_charity(
-        charity_id=int,  # id удаляемого проекта
+async def create_charity_project(
+        new_project: CharityProjectCreate,
         session: AsyncSession = Depends(get_async_session),
 ):
     """
-    Только для суперюзеров.
+    Только для суперюзеров.\n
+    Создает благотворительный проект.
+    """
+    await check_name_duplicate(new_project.name, session)
+    new_project = await charity_project_crud.create(new_project, session)
+    # new_project = await invest_project(new_project, session)
+    return new_project
+
+
+@router.patch(
+    '/project_id',
+    response_model=CharityProjectDB,
+    dependencies=[Depends(current_superuser)],
+)
+async def update_charity_project(
+        project_id: int,
+        project_obj: CharityProjectUpdate,
+        session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Только для суперюзеров.\n
+    Закрытый проект нельзя редактировать, также нельзя установить требуемую сумму меньше уже вложенной.
+    """
+    project = await check_project_exists(project_id, session)
+    await check_project_close(project)
+    await check_project_donations(project, project_obj.full_amount)
+    await check_name_duplicate(project_obj.name, session)
+    project = await charity_project_crud.update(project, project_obj, session)
+    return project
+
+
+@router.delete(
+    '/project_id',
+    response_model=CharityProjectDB,
+    dependencies=[Depends(current_superuser)],
+)
+async def delete_charity_project(
+        project_id: int,
+        session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Только для суперюзеров.\n
     Удаляет проект. Нельзя удалить проект, в который уже были инвестированы средства, его можно только закрыть.
     """
-    charity = await check_charity_exist(charity_id, session)  # Проверка существования проекта
-    await check_charity_donations(charity)  # Проверка доната проекта
-    charity = await charity_crud.remove(charity, session)
-    return charity
+    project = await check_project_exists(project_id, session)
+    await check_project_donations(project)
+    project = await charity_project_crud.remove(project, session)
+    return project
