@@ -9,11 +9,11 @@ class CRUDDonation(CRUDBase):
 
     async def get_by_user(
             self,
-            session: AsyncSession,
             user: User,
+            session: AsyncSession,
     ):
         donations = await session.execute(
-            select(Donation).where(Donation.user_id == user.id)
+            select(self.model).where(self.model.user_id == user.id)
         )
         return donations.scalars().all()
 
