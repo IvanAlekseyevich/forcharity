@@ -1,5 +1,6 @@
 from typing import Optional
 
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,7 +8,7 @@ from app.crud.base import CRUDBase
 from app.models.charity import CharityProject
 
 
-class CRUDCharity(CRUDBase):
+class CRUDCharityProject(CRUDBase):
 
     async def get(
             self,
@@ -27,9 +28,9 @@ class CRUDCharity(CRUDBase):
     ):
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict()
-
         for field in obj_data:
-            setattr(db_obj, field, update_data[field])
+            if field in update_data:
+                setattr(db_obj, field, update_data[field])
         session.add(db_obj)
         await session.commit()
         await session.refresh(db_obj)
@@ -50,7 +51,7 @@ class CRUDCharity(CRUDBase):
             session: AsyncSession,
     ) -> Optional[int]:
         db_charity_id = await session.execute(
-            select(charity_name.id).where(
+            select(CharityProject.id).where(
                 CharityProject.name == charity_name
             )
         )
@@ -58,4 +59,4 @@ class CRUDCharity(CRUDBase):
         return db_charity_id
 
 
-charity_crud = CRUDCharity(CharityProject)
+charity_project_crud = CRUDCharityProject(CharityProject)
