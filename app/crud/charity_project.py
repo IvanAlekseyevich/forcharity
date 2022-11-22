@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Optional
 
 from fastapi.encoders import jsonable_encoder
@@ -29,14 +28,11 @@ class CRUDCharityProject(CRUDBase):
     ):
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict()
-        print(update_data)
         for field in obj_data:
-            print(field)
             if field in update_data and update_data[field] is not None:
                 setattr(db_obj, field, update_data[field])
         if db_obj.full_amount == db_obj.invested_amount:
-            db_obj.fully_invested = True
-            db_obj.close_date = datetime.now()
+            db_obj = await CRUDBase.set_close(db_obj)
         session.add(db_obj)
         await session.commit()
         await session.refresh(db_obj)
