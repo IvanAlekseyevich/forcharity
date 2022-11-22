@@ -1,13 +1,16 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, PositiveInt, validator
+from pydantic import BaseModel, Extra, Field, PositiveInt, validator
 
 
 class CharityBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
     description: str = Field(..., min_length=1)
     full_amount: PositiveInt
+
+    class Config:
+        extra = Extra.forbid
 
 
 class CharityProjectCreate(CharityBase):
@@ -17,15 +20,25 @@ class CharityProjectCreate(CharityBase):
 class CharityProjectUpdate(CharityBase):
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     description: Optional[str] = Field(None, min_length=1)
-    full_amount: Optional[PositiveInt] = None
+    full_amount: Optional[PositiveInt]
 
-    # @validator('name', 'description')
-    # def check_empty_string(cls, values):
-    #     print(values)
-    #     if values == '':
-    #         raise ValueError('Не может быть пустым!')
-    #     return values
-    pass
+    @validator('name')
+    def name_update(cls, value):
+        if value is None:
+            raise ValueError('Имя не может быть пустым!')
+        return value
+
+    @validator('description')
+    def description_update(cls, value):
+        if value is None:
+            raise ValueError('Описание не может быть пустым!')
+        return value
+
+    @validator('full_amount')
+    def description_update(cls, value):
+        if value is None:
+            raise ValueError('Требуемая сумма не может быть пустой!')
+        return value
 
 
 class CharityProjectDB(CharityBase):
