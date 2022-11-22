@@ -8,6 +8,9 @@ class DonationBase(BaseModel):
     full_amount: PositiveInt
     comment: Optional[str]
 
+    class Config:
+        extra = Extra.forbid
+
 
 class DonationCreate(DonationBase):
     pass
