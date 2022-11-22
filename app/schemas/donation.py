@@ -6,7 +6,7 @@ from pydantic import BaseModel, PositiveInt
 
 class DonationBase(BaseModel):
     full_amount: PositiveInt
-    comment: Optional[str] = None
+    comment: Optional[str]
 
 
 class DonationCreate(DonationBase):
