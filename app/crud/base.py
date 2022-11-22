@@ -34,3 +34,10 @@ class CRUDBase:
         await session.commit()
         await session.refresh(db_obj)
         return db_obj
+
+    async def get_all_open(
+            self,
+            session: AsyncSession,
+    ):
+        db_objs = await session.execute(select(self.model).where(self.model.fully_invested == False))
+        return db_objs.scalars().all()
