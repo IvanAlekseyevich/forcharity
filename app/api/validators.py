@@ -6,18 +6,18 @@ from app.models import CharityProject
 
 
 async def check_name_duplicate(
-        charity_name: str,
+        project_name: str,
         session: AsyncSession,
 ) -> None:
-    charity_id = await charity_project_crud.get_charity_id_by_name(charity_name, session)
-    if charity_id is not None:
+    project_id = await charity_project_crud.get_charity_project_id_by_name(project_name, session)
+    if project_id is not None:
         raise HTTPException(
             status_code=400,
             detail='Проект с таким именем уже существует!',
         )
 
 
-async def check_project_exists(
+async def check_charity_project_exists(
         project_id: int,
         session: AsyncSession,
 ) -> CharityProject:
@@ -30,7 +30,7 @@ async def check_project_exists(
     return project
 
 
-async def check_project_close(
+async def check_charity_project_close(
         project: CharityProject,
 ) -> None:
     if project.fully_invested is True:
@@ -40,13 +40,13 @@ async def check_project_close(
         )
 
 
-async def check_project_donations(
+async def check_charity_project_donations(
         project: CharityProject,
         new_amount: int = None
 ) -> None:
     if new_amount is not None and project.invested_amount > new_amount:
         raise HTTPException(
-            status_code=423,
+            status_code=400,
             detail='Нельзя установить сумму, ниже уже вложенной!'
         )
     if new_amount is None and project.invested_amount != 0:
