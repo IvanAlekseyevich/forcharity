@@ -35,7 +35,7 @@ class CharityProjectUpdate(CharityBase):
         return value
 
     @validator('full_amount')
-    def description_update(cls, value):
+    def full_amount_update(cls, value):
         if value is None:
             raise ValueError('Требуемая сумма не может быть пустой!')
         return value
