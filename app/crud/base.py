@@ -41,3 +41,9 @@ class CRUDBase:
     ):
         db_objs = await session.execute(select(self.model).where(self.model.fully_invested == False))
         return db_objs.scalars().all()
+
+    @staticmethod
+    async def set_close(obj):
+        obj.fully_invested = True
+        obj.close_date = datetime.now()
+
