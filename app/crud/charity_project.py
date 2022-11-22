@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CRUDBase
-from app.models.charity import CharityProject
+from app.models.charity_project import CharityProject
 
 
 class CRUDCharityProject(CRUDBase):
@@ -27,9 +27,12 @@ class CRUDCharityProject(CRUDBase):
             session: AsyncSession,
     ):
         obj_data = jsonable_encoder(db_obj)
+        print(obj_data)
         update_data = obj_in.dict()
+        print(update_data)
         for field in obj_data:
-            if field in update_data:
+            print(field)
+            if field in update_data and update_data[field] is not None:
                 setattr(db_obj, field, update_data[field])
         session.add(db_obj)
         await session.commit()

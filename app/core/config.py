@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class Setting(BaseModel):
+class Settings(BaseModel):
     app_title: str = 'Благотворительный фонд QRKot'
     app_description: str = 'Сервис для поддержки нуждающихся'
     database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
@@ -11,4 +11,4 @@ class Setting(BaseModel):
         env_file = '.env'
 
 
-settings = Setting()
+settings = Settings()

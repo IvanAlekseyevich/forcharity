@@ -8,8 +8,9 @@ from app.api.validators import (
 )
 from app.core.db import get_async_session
 from app.core.user import current_superuser
-from app.crud.charity import charity_project_crud
-from app.schemas.charity import CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
+from app.crud.charity_project import charity_project_crud
+from app.schemas.charity_project import CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
+from app.services.investing import invest_project
 
 router = APIRouter()
 
@@ -17,6 +18,7 @@ router = APIRouter()
 @router.get(
     '/',
     response_model=List[CharityProjectDB],
+    response_model_exclude={'close_date'},
 )
 async def get_all_charity_projects(
         session: AsyncSession = Depends(get_async_session),
@@ -30,6 +32,7 @@ async def get_all_charity_projects(
     '/',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
+    response_model_exclude={'close_date'},
 )
 async def create_charity_project(
         new_project: CharityProjectCreate,
@@ -41,12 +44,12 @@ async def create_charity_project(
     """
     await check_name_duplicate(new_project.name, session)
     new_project = await charity_project_crud.create(new_project, session)
-    # new_project = await invest_project(new_project, session)
+    await invest_project(new_project, session)
     return new_project
 
 
 @router.patch(
-    '/project_id',
+    '/{project_id}',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
 )
@@ -68,7 +71,7 @@ async def update_charity_project(
 
 
 @router.delete(
-    '/project_id',
+    '/{project_id}',
     response_model=CharityProjectDB,
     dependencies=[Depends(current_superuser)],
 )
@@ -82,5 +85,6 @@ async def delete_charity_project(
     """
     project = await check_project_exists(project_id, session)
     await check_project_donations(project)
+    await check_project_close(project)
     project = await charity_project_crud.remove(project, session)
     return project

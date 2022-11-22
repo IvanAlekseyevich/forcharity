@@ -42,7 +42,7 @@ async def create_donation(
 ):
     """Сделать пожертвование."""
     new_donation = await donation_crud.create(donation, session, user)
-    # new_donation = await invest_donation(new_donation, session)
+    await invest_donation(new_donation, session)
     return new_donation
 
 
