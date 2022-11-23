@@ -4,8 +4,8 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.db import CharityProject
 from app.crud.base import CRUDBase
-from app.models.charity_project import CharityProject
 
 
 class CRUDCharityProject(CRUDBase):
@@ -31,7 +31,7 @@ class CRUDCharityProject(CRUDBase):
             if field in update_data and update_data[field] is not None:
                 setattr(db_obj, field, update_data[field])
         if db_obj.full_amount == db_obj.invested_amount:
-            db_obj = CRUDBase.set_close(db_obj)
+            db_obj = self.set_close(db_obj)
         session.add(db_obj)
         await session.commit()
         await session.refresh(db_obj)
