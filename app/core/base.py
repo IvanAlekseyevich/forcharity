@@ -1,3 +1,2 @@
 """Импорты класса Base и всех моделей для Alembic."""
-from app.core.db import Base
-from app.models import CharityProject, Donation, User
+from app.core.db import Base, CharityProject, Donation, User
