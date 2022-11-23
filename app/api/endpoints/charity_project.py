@@ -6,10 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app import schemas
 from app.api import validators
 from app.core.db import get_async_session
+from app.core.services import investing_sevice
 from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
 from app.models import Donation
-from app.services.investing import investment
 
 router = APIRouter()
 
@@ -43,7 +43,7 @@ async def create_charity_project(
     """
     await validators.check_name_duplicate(new_project.name, session)
     new_project = await charity_project_crud.create(new_project, session)
-    await investment(new_project, Donation, session)
+    await investing_sevice.investment(new_project, Donation, session)
     return new_project
 
 
