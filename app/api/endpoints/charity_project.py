@@ -16,7 +16,7 @@ router = APIRouter()
 
 @router.get(
     '/',
-    response_model=List[schemas.CharityProjectDB],
+    response_model=List[schemas.CharityProjectDBResponse],
     response_model_exclude={'close_date'},
 )
 async def get_all_charity_projects(
@@ -29,12 +29,12 @@ async def get_all_charity_projects(
 
 @router.post(
     '/',
-    response_model=schemas.CharityProjectDB,
+    response_model=schemas.CharityProjectDBResponse,
     dependencies=[Depends(current_superuser)],
     response_model_exclude_none=True,
 )
 async def create_charity_project(
-        new_project: schemas.CharityProjectCreate,
+        new_project: schemas.CharityProjectCreateRequest,
         session: AsyncSession = Depends(get_async_session),
 ):
     """
@@ -49,12 +49,12 @@ async def create_charity_project(
 
 @router.patch(
     '/{project_id}',
-    response_model=schemas.CharityProjectDB,
+    response_model=schemas.CharityProjectDBResponse,
     dependencies=[Depends(current_superuser)],
 )
 async def update_charity_project(
         project_id: int,
-        project_obj: schemas.CharityProjectUpdate,
+        project_obj: schemas.CharityProjectUpdateRequest,
         session: AsyncSession = Depends(get_async_session),
 ):
     """
@@ -72,7 +72,7 @@ async def update_charity_project(
 
 @router.delete(
     '/{project_id}',
-    response_model=schemas.CharityProjectDB,
+    response_model=schemas.CharityProjectDBResponse,
     dependencies=[Depends(current_superuser)],
 )
 async def delete_charity_project(

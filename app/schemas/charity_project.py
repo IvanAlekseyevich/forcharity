@@ -13,11 +13,11 @@ class CharityBase(BaseModel):
         extra = Extra.forbid
 
 
-class CharityProjectCreate(CharityBase):
+class CharityProjectCreateRequest(CharityBase):
     pass
 
 
-class CharityProjectUpdate(CharityBase):
+class CharityProjectUpdateRequest(CharityBase):
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     description: Optional[str] = Field(None, min_length=1)
     full_amount: Optional[PositiveInt]
@@ -41,7 +41,7 @@ class CharityProjectUpdate(CharityBase):
         return value
 
 
-class CharityProjectDB(CharityBase):
+class CharityProjectDBResponse(CharityBase):
     id: int
     invested_amount: int = 0
     fully_invested: bool = False

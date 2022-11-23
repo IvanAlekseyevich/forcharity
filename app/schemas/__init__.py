@@ -1,2 +1,2 @@
-from .charity_project import CharityProjectCreate, CharityProjectDB, CharityProjectUpdate
-from .donation import DonationAdminDB, DonationDB, DonationCreate
+from .charity_project import CharityProjectCreateRequest, CharityProjectDBResponse, CharityProjectUpdateRequest
+from .donation import DonationAdminDBResponseResponse, DonationDBResponse, DonationCreateRequest

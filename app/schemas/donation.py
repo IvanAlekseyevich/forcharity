@@ -12,11 +12,11 @@ class DonationBase(BaseModel):
         extra = Extra.forbid
 
 
-class DonationCreate(DonationBase):
+class DonationCreateRequest(DonationBase):
     pass
 
 
-class DonationDB(DonationBase):
+class DonationDBResponse(DonationBase):
     id: int
     create_date: datetime
 
@@ -24,7 +24,7 @@ class DonationDB(DonationBase):
         orm_mode = True
 
 
-class DonationAdminDB(DonationDB):
+class DonationAdminDBResponseResponse(DonationDBResponse):
     user_id: int
     invested_amount: int = 0
     fully_invested: bool = False
