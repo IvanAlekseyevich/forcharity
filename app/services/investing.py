@@ -9,6 +9,15 @@ async def investment(
         model,
         session: AsyncSession,
 ) -> None:
+    """
+    Автоматически инвестирует средства в открытые проекты,
+    закрывает донаты/проекты при достижении лимита.
+    При создании доната перебирает открытые проекты и инвестирует в них.
+    При создании проекта перебирает свободные донаты и инвестирует из них.
+
+    :param new_obj: - только что созданный донат/проект
+    :param model:  - модель, открытые объекты которой мы будем перебирать.
+    """
     all_open_obj = await session.execute(select(model).where(model.fully_invested == False))
     all_open_obj = all_open_obj.scalars().all()
     to_close_new_obj = new_obj.full_amount - new_obj.invested_amount
