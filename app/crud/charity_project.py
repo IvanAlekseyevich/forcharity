@@ -32,7 +32,7 @@ class CRUDCharityProject(CRUDBase):
             if field in update_data and update_data[field] is not None:
                 setattr(db_obj, field, update_data[field])
         if db_obj.full_amount == db_obj.invested_amount:
-            db_obj = await CRUDBase.set_close(db_obj)
+            db_obj = CRUDBase.set_close(db_obj)
         session.add(db_obj)
         await session.commit()
         await session.refresh(db_obj)

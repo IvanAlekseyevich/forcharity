@@ -26,9 +26,9 @@ async def investment(
         if to_close_new_obj <= to_close_open_obj:
             open_obj.invested_amount += to_close_new_obj
             new_obj.invested_amount += to_close_new_obj
-            new_obj = await crud_base.set_close(new_obj)
+            new_obj = crud_base.set_close(new_obj)
             if to_close_new_obj == to_close_open_obj:
-                open_obj = await crud_base.set_close(open_obj)
+                open_obj = crud_base.set_close(open_obj)
             session.add(new_obj)
             session.add(open_obj)
             break
@@ -36,7 +36,7 @@ async def investment(
             open_obj.invested_amount += to_close_open_obj
             to_close_new_obj -= to_close_open_obj
             new_obj.invested_amount += to_close_open_obj
-            open_obj = await crud_base.set_close(open_obj)
+            open_obj = crud_base.set_close(open_obj)
             session.add(new_obj)
             session.add(open_obj)
             continue

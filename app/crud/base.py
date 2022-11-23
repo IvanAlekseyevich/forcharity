@@ -36,7 +36,7 @@ class CRUDBase:
         return db_obj
 
     @staticmethod
-    async def set_close(obj):
+    def set_close(obj):
         obj.fully_invested = True
         obj.close_date = datetime.now()
         return obj
