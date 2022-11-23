@@ -14,7 +14,7 @@ async def check_name_duplicate(
     if project_id is not None:
         raise HTTPException(
             status_code=400,
-            detail='Проект с таким именем уже существует!',
+            detail="Проект с таким именем уже существует!",
         )
 
 
@@ -27,7 +27,7 @@ async def get_charity_project_exists(
     if project is None:
         raise HTTPException(
             status_code=404,
-            detail='Проект не найден!'
+            detail="Проект не найден!"
         )
     return project
 
@@ -39,7 +39,7 @@ def check_charity_project_close(
     if project.fully_invested is True:
         raise HTTPException(
             status_code=400,
-            detail='Закрытый проект нельзя редактировать!'
+            detail="Закрытый проект нельзя редактировать!"
         )
 
 
@@ -51,7 +51,7 @@ def check_invested_before_edit(
     if project.invested_amount > new_amount:
         raise HTTPException(
             status_code=400,
-            detail='Нельзя установить сумму, ниже уже вложенной!'
+            detail="Нельзя установить сумму, ниже уже вложенной!"
         )
 
 
