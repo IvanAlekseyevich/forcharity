@@ -14,13 +14,13 @@ router = APIRouter()
 
 
 @router.get(
-    '/',
+    "/",
     response_model=List[schemas.DonationAdminDBResponseResponse],
     dependencies=[Depends(current_superuser)],
     response_model_exclude_none=True,
 )
 async def get_all_donations(
-        session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_async_session),
 ):
     """
     Только для суперюзеров.\n
@@ -31,14 +31,14 @@ async def get_all_donations(
 
 
 @router.post(
-    '/',
+    "/",
     response_model=schemas.DonationDBResponse,
     response_model_exclude_none=True,
 )
 async def create_donation(
-        donation: schemas.DonationCreateRequest,
-        session: AsyncSession = Depends(get_async_session),
-        user: User = Depends(current_user),
+    donation: schemas.DonationCreateRequest,
+    session: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_user),
 ):
     """Сделать пожертвование."""
     new_donation = await donation_crud.create(donation, session, user)
@@ -47,13 +47,13 @@ async def create_donation(
 
 
 @router.get(
-    '/my',
+    "/my",
     response_model=List[schemas.DonationDBResponse],
     response_model_exclude_none=True,
 )
 async def get_user_donations(
-        session: AsyncSession = Depends(get_async_session),
-        user: User = Depends(current_user),
+    session: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_user),
 ):
     """Получить список моих пожертвований."""
     donations = await donation_crud.get_by_user(user, session)

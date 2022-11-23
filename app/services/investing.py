@@ -5,9 +5,9 @@ from app.crud import crud_base
 
 
 async def investment(
-        new_obj,
-        model,
-        session: AsyncSession,
+    new_obj,
+    model,
+    session: AsyncSession,
 ) -> None:
     """
     Автоматически инвестирует средства в открытые проекты,
@@ -18,7 +18,9 @@ async def investment(
     :param new_obj: - только что созданный донат/проект
     :param model:  - модель, открытые объекты которой мы будем перебирать.
     """
-    all_open_obj = await session.execute(select(model).where(model.fully_invested == False))
+    all_open_obj = await session.execute(
+        select(model).where(model.fully_invested == False)
+    )
     all_open_obj = all_open_obj.scalars().all()
     to_close_new_obj = new_obj.full_amount - new_obj.invested_amount
     for open_obj in all_open_obj:

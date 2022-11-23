@@ -22,19 +22,19 @@ class CharityProjectUpdateRequest(CharityBase):
     description: Optional[str] = Field(None, min_length=1)
     full_amount: Optional[PositiveInt]
 
-    @validator('name')
+    @validator("name")
     def validate_name(cls, value):
         if value is None:
             raise ValueError("Имя не может быть пустым!")
         return value
 
-    @validator('description')
+    @validator("description")
     def validate_description(cls, value):
         if value is None:
             raise ValueError("Описание не может быть пустым!")
         return value
 
-    @validator('full_amount')
+    @validator("full_amount")
     def validate_full_amount(cls, value):
         if value is None:
             raise ValueError("Требуемая сумма не может быть пустой!")

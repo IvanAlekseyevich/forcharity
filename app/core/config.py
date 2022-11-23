@@ -8,7 +8,7 @@ class Settings(BaseModel):
     hash_gen_key: str = "Secret"
 
     class Config:
-        env_file = '.env'
+        env_file = ".env"
 
 
 settings = Settings()

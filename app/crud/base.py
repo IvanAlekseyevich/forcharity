@@ -8,27 +8,26 @@ from app.models import User
 
 
 class CRUDBase:
-
     def __init__(self, model):
         self.model = model
 
     async def get_multi(
-            self,
-            session: AsyncSession,
+        self,
+        session: AsyncSession,
     ):
         db_objs = await session.execute(select(self.model))
         return db_objs.scalars().all()
 
     async def create(
-            self,
-            obj_in,
-            session: AsyncSession,
-            user: Optional[User] = None,
+        self,
+        obj_in,
+        session: AsyncSession,
+        user: Optional[User] = None,
     ):
         obj_in_data = obj_in.dict()
         if user is not None:
-            obj_in_data['user_id'] = user.id
-        obj_in_data['create_date'] = datetime.now()
+            obj_in_data["user_id"] = user.id
+        obj_in_data["create_date"] = datetime.now()
         db_obj = self.model(**obj_in_data)
         session.add(db_obj)
         await session.commit()

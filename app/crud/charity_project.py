@@ -9,11 +9,10 @@ from app.models.charity_project import CharityProject
 
 
 class CRUDCharityProject(CRUDBase):
-
     async def get(
-            self,
-            charity_id: int,
-            session: AsyncSession,
+        self,
+        charity_id: int,
+        session: AsyncSession,
     ):
         db_obj = await session.execute(
             select(self.model).where(self.model.id == charity_id)
@@ -21,10 +20,10 @@ class CRUDCharityProject(CRUDBase):
         return db_obj.scalars().first()
 
     async def update(
-            self,
-            db_obj,
-            obj_in,
-            session: AsyncSession,
+        self,
+        db_obj,
+        obj_in,
+        session: AsyncSession,
     ):
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict()
@@ -39,18 +38,18 @@ class CRUDCharityProject(CRUDBase):
         return db_obj
 
     async def remove(
-            self,
-            db_obj,
-            session: AsyncSession,
+        self,
+        db_obj,
+        session: AsyncSession,
     ):
         await session.delete(db_obj)
         await session.commit()
         return db_obj
 
     async def get_charity_project_id_by_name(
-            self,
-            charity_name: str,
-            session: AsyncSession,
+        self,
+        charity_name: str,
+        session: AsyncSession,
     ) -> Optional[int]:
         db_charity_id = await session.execute(
             select(self.model.id).where(self.model.name == charity_name)
