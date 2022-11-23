@@ -5,10 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import schemas
 from app.api import validators
-from app.core.db import get_async_session
+from app.core.db import charity_project_crud, get_async_session
 from app.core.services import investing_sevice
 from app.core.user import current_superuser
-from app.crud.charity_project import charity_project_crud
 from app.models import Donation
 
 router = APIRouter()
