@@ -62,10 +62,10 @@ async def update_charity_project(
     Закрытый проект нельзя редактировать, также нельзя установить требуемую сумму меньше уже вложенной.
     """
     project = await validators.get_charity_project_exists(project_id, session)
-    await validators.check_charity_project_close(project)
+    validators.check_charity_project_close(project)
     await validators.check_name_duplicate(project_obj.name, session)
     if project_obj.full_amount is not None:
-        await validators.check_invested_before_edit(project, project_obj.full_amount)
+        validators.check_invested_before_edit(project, project_obj.full_amount)
     project = await charity_project_crud.update(project, project_obj, session)
     return project
 
@@ -84,7 +84,7 @@ async def delete_charity_project(
     Удаляет проект. Нельзя удалить проект, в который уже были инвестированы средства, его можно только закрыть.
     """
     project = await validators.get_charity_project_exists(project_id, session)
-    await validators.check_invested_before_delete(project)
-    await validators.check_charity_project_close(project)
+    validators.check_invested_before_delete(project)
+    validators.check_charity_project_close(project)
     project = await charity_project_crud.remove(project, session)
     return project

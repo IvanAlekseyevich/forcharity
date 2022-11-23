@@ -32,7 +32,7 @@ async def get_charity_project_exists(
     return project
 
 
-async def check_charity_project_close(
+def check_charity_project_close(
         project: CharityProject,
 ) -> None:
     """Проверяет, закрыт ли проект."""
@@ -43,7 +43,7 @@ async def check_charity_project_close(
         )
 
 
-async def check_invested_before_edit(
+def check_invested_before_edit(
         project: CharityProject,
         new_amount: int
 ) -> None:
@@ -55,7 +55,7 @@ async def check_invested_before_edit(
         )
 
 
-async def check_invested_before_delete(
+def check_invested_before_delete(
         project: CharityProject,
 ) -> None:
     """Проверяет сумму, инвестированную в проект."""
