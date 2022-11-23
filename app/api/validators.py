@@ -17,7 +17,7 @@ async def check_name_duplicate(
         )
 
 
-async def check_charity_project_exists(
+async def get_charity_project_exists(
         project_id: int,
         session: AsyncSession,
 ) -> CharityProject:
@@ -40,16 +40,21 @@ async def check_charity_project_close(
         )
 
 
-async def check_charity_project_donations(
+async def check_invested_before_edit(
         project: CharityProject,
-        new_amount: int = None
+        new_amount: int
 ) -> None:
-    if new_amount is not None and project.invested_amount > new_amount:
+    if project.invested_amount > new_amount:
         raise HTTPException(
             status_code=400,
             detail='Нельзя установить сумму, ниже уже вложенной!'
         )
-    if new_amount is None and project.invested_amount != 0:
+
+
+async def check_invested_before_delete(
+        project: CharityProject,
+) -> None:
+    if project.invested_amount != 0:
         raise HTTPException(
             status_code=400,
             detail='В проект были внесены средства, не подлежит удалению!'
