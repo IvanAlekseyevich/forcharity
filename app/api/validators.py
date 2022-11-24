@@ -10,9 +10,7 @@ async def check_name_duplicate(
     session: AsyncSession,
 ) -> None:
     """Проверяет оригинальность названия проекта."""
-    project_id = await charity_project_crud.get_charity_project_id_by_name(
-        project_name, session
-    )
+    project_id = await charity_project_crud.get_by_name(project_name, session)
     if project_id is not None:
         raise HTTPException(
             status_code=400,

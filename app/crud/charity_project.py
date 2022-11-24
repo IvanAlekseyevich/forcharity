@@ -46,7 +46,7 @@ class CRUDCharityProject(CRUDBase):
         await session.commit()
         return db_obj
 
-    async def get_charity_project_id_by_name(
+    async def get_by_name(
         self,
         charity_name: str,
         session: AsyncSession,
