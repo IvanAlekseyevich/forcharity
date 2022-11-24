@@ -15,7 +15,7 @@ class CRUDCharityProject(CRUDBase):
         session: AsyncSession,
     ):
         db_obj = await session.execute(
-            select(self.model).where(self.model.id == charity_id)
+            select(self._model).where(self._model.id == charity_id)
         )
         return db_obj.scalars().first()
 
@@ -52,7 +52,7 @@ class CRUDCharityProject(CRUDBase):
         session: AsyncSession,
     ) -> Optional[int]:
         db_charity_id = await session.execute(
-            select(self.model.id).where(self.model.name == charity_name)
+            select(self._model.id).where(self._model.name == charity_name)
         )
         db_charity_id = db_charity_id.scalars().first()
         return db_charity_id

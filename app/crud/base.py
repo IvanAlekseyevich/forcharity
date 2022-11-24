@@ -9,13 +9,13 @@ from app.core.db import User
 
 class CRUDBase:
     def __init__(self, model):
-        self.model = model
+        self._model = model
 
     async def get_multi(
         self,
         session: AsyncSession,
     ):
-        db_objs = await session.execute(select(self.model))
+        db_objs = await session.execute(select(self._model))
         return db_objs.scalars().all()
 
     async def create(
@@ -28,7 +28,7 @@ class CRUDBase:
         if user is not None:
             obj_in_data["user_id"] = user.id
         obj_in_data["create_date"] = datetime.now()
-        db_obj = self.model(**obj_in_data)
+        db_obj = self._model(**obj_in_data)
         session.add(db_obj)
         await session.commit()
         await session.refresh(db_obj)

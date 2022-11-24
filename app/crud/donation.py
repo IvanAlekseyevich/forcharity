@@ -12,7 +12,7 @@ class CRUDDonation(CRUDBase):
         session: AsyncSession,
     ):
         donations = await session.execute(
-            select(self.model).where(self.model.user_id == user.id)
+            select(self._model).where(self._model.user_id == user.id)
         )
         return donations.scalars().all()
 
