@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.db import CharityProject
+from app.core.models import CharityProject
 from app.crud.base import CRUDBase
 
 

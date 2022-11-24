@@ -15,7 +15,7 @@ from fastapi_users.authentication import (
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.db import get_async_session, User
+from app.core.models import get_async_session, User
 from app.core.settings import settings
 from app.schemas.user import UserCreate
 
@@ -40,9 +40,9 @@ auth_backend = AuthenticationBackend(
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def validate_password(
-            self,
-            password: str,
-            user: Union[UserCreate, User],
+        self,
+        password: str,
+        user: Union[UserCreate, User],
     ) -> None:
         if len(password) < 3:
             raise InvalidPasswordException(

@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.db import Donation, User
+from app.core.models import Donation, User
 from app.crud.base import CRUDBase
 
 
