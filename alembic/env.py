@@ -8,7 +8,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from app.core.base import Base
+from app.core.models.base import Base
 
 load_dotenv('.env')
 config = context.config
