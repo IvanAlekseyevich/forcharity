@@ -1,9 +1,10 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional, Union
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.models import CharityProject, Donation
 from app.core.models import User
 
 
@@ -14,7 +15,7 @@ class CRUDBase:
     async def get_multi(
         self,
         session: AsyncSession,
-    ):
+    ) -> List[Union[CharityProject, Donation]]:
         db_objs = await session.execute(select(self._model))
         return db_objs.scalars().all()
 
@@ -23,7 +24,7 @@ class CRUDBase:
         obj_in,
         session: AsyncSession,
         user: Optional[User] = None,
-    ):
+    ) -> Union[CharityProject, Donation]:
         obj_in_data = obj_in.dict()
         if user is not None:
             obj_in_data["user_id"] = user.id
@@ -35,7 +36,9 @@ class CRUDBase:
         return db_obj
 
     @staticmethod
-    def set_close(obj):
+    def set_close(
+        obj: Union[CharityProject, Donation]
+    ) -> Union[CharityProject, Donation]:
         obj.fully_invested = True
         obj.close_date = datetime.now()
         return obj

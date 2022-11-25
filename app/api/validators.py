@@ -39,7 +39,10 @@ def check_charity_project_close(
         )
 
 
-def check_invested_before_edit(project: CharityProject, new_amount: int) -> None:
+def check_invested_before_edit(
+    project: CharityProject,
+    new_amount: int,
+) -> None:
     """Проверяет сумму, инвестированную в проект."""
     if project.invested_amount > new_amount:
         raise HTTPException(

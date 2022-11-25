@@ -13,7 +13,7 @@ class CRUDCharityProject(CRUDBase):
         self,
         charity_id: int,
         session: AsyncSession,
-    ):
+    ) -> CharityProject:
         db_obj = await session.execute(
             select(self._model).where(self._model.id == charity_id)
         )
@@ -21,10 +21,10 @@ class CRUDCharityProject(CRUDBase):
 
     async def update(
         self,
-        db_obj,
+        db_obj: CharityProject,
         obj_in,
         session: AsyncSession,
-    ):
+    ) -> CharityProject:
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict()
         for field in obj_data:
@@ -39,23 +39,23 @@ class CRUDCharityProject(CRUDBase):
 
     async def remove(
         self,
-        db_obj,
+        db_obj: CharityProject,
         session: AsyncSession,
-    ):
+    ) -> CharityProject:
         await session.delete(db_obj)
         await session.commit()
         return db_obj
 
     async def get_by_name(
         self,
-        charity_name: str,
+        project_name: str,
         session: AsyncSession,
     ) -> Optional[int]:
-        db_charity_id = await session.execute(
-            select(self._model.id).where(self._model.name == charity_name)
+        db_project_id = await session.execute(
+            select(self._model.id).where(self._model.name == project_name)
         )
-        db_charity_id = db_charity_id.scalars().first()
-        return db_charity_id
+        db_project_id = db_project_id.scalars().first()
+        return db_project_id
 
 
 charity_project_crud = CRUDCharityProject(CharityProject)

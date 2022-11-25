@@ -1,12 +1,15 @@
+from typing import Union
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.models import CharityProject, Donation
 from app.crud import crud_base
 
 
 async def investment(
-    new_obj,
-    model,
+    new_obj: Union[CharityProject, Donation],
+    model: Union[CharityProject, Donation],
     session: AsyncSession,
 ) -> None:
     """
