@@ -13,4 +13,9 @@ class Donation(Base):
     close_date = Column(DateTime)
 
     def __repr__(self):
-        return f"Пользователь: {self.user_id}, пожертвовал {self.full_amount}, инвестировано {self.invested_amount}, статус {self.fully_invested}"
+        return (
+            f"<User_id: {self.user_id}, "
+            f"full_amount: {self.full_amount}, "
+            f"invested_amount: {self.invested_amount}, "
+            f"fully_invested: {self.fully_invested}>"
+        )
