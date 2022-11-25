@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api.endpoints import charity_project_router, donation_router, user_router
+from app.api.routers import charity_project_router, donation_router, user_router
 from app.core.settings import settings
 
 start_app = FastAPI(title=settings.app_title, description=settings.app_description)
