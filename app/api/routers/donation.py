@@ -61,7 +61,7 @@ class DonationCBV:
     async def get_user_donations(
         self,
         user: User = Depends(current_user),
-    ):
+    ) -> DonationDBResponse:
         """Возвращает список пожертвований текущего пользователя."""
         donations = await donation_crud.get_by_user(user, self.session)
         return donations
