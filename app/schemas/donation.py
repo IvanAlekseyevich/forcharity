@@ -24,7 +24,7 @@ class DonationDBResponse(DonationBase):
         orm_mode = True
 
 
-class DonationAdminDBResponseResponse(DonationDBResponse):
+class DonationAdminDBResponse(DonationDBResponse):
     user_id: int
     invested_amount: int = 0
     fully_invested: bool = False
