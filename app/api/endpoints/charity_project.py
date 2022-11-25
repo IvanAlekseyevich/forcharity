@@ -3,39 +3,41 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app import schemas
 from app.api import validators
 from app.core.models import Donation, get_async_session
 from app.core.services import investing_sevice
 from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
+from app.schemas import CharityProjectDBResponse, CharityProjectUpdateRequest, CharityProjectCreateRequest
 
 router = APIRouter()
 
 
 @router.get(
     "/",
-    response_model=List[schemas.CharityProjectDBResponse],
-    response_model_exclude={"close_date"},
+    response_model=List[CharityProjectDBResponse],
+    response_model_exclude_none=True,
+    summary="Получить список всех проектов.",
 )
 async def get_all_charity_projects(
-    session: AsyncSession = Depends(get_async_session),
-):
-    """Получает список всех проектов"""
+        session: AsyncSession = Depends(get_async_session),
+) -> List[CharityProjectDBResponse]:
+    """Возвращает список всех проектов"""
     all_projects = await charity_project_crud.get_multi(session)
     return all_projects
 
 
 @router.post(
     "/",
-    response_model=schemas.CharityProjectDBResponse,
+    response_model=CharityProjectDBResponse,
     dependencies=[Depends(current_superuser)],
     response_model_exclude_none=True,
+    summary="Создать проект.",
 )
 async def create_charity_project(
-    new_project: schemas.CharityProjectCreateRequest,
-    session: AsyncSession = Depends(get_async_session),
-):
+        new_project: CharityProjectCreateRequest,
+        session: AsyncSession = Depends(get_async_session),
+) -> CharityProjectDBResponse:
     """
     Только для суперюзеров.\n
     Создает благотворительный проект.
@@ -48,14 +50,15 @@ async def create_charity_project(
 
 @router.patch(
     "/{project_id}",
-    response_model=schemas.CharityProjectDBResponse,
+    response_model=CharityProjectDBResponse,
     dependencies=[Depends(current_superuser)],
+    summary="Изменить проект.",
 )
 async def update_charity_project(
-    project_id: int,
-    project_obj: schemas.CharityProjectUpdateRequest,
-    session: AsyncSession = Depends(get_async_session),
-):
+        project_id: int,
+        project_obj: CharityProjectUpdateRequest,
+        session: AsyncSession = Depends(get_async_session),
+) -> CharityProjectDBResponse:
     """
     Только для суперюзеров.\n
     Закрытый проект нельзя редактировать, также нельзя установить требуемую сумму меньше уже вложенной.
@@ -71,13 +74,14 @@ async def update_charity_project(
 
 @router.delete(
     "/{project_id}",
-    response_model=schemas.CharityProjectDBResponse,
+    response_model=CharityProjectDBResponse,
     dependencies=[Depends(current_superuser)],
+    summary="Удалить проект.",
 )
 async def delete_charity_project(
-    project_id: int,
-    session: AsyncSession = Depends(get_async_session),
-):
+        project_id: int,
+        session: AsyncSession = Depends(get_async_session),
+) -> CharityProjectDBResponse:
     """
     Только для суперюзеров.\n
     Удаляет проект. Нельзя удалить проект, в который уже были инвестированы средства, его можно только закрыть.
