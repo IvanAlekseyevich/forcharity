@@ -33,7 +33,7 @@ class DonationCBV:
         Только для суперюзеров.\n
         Получает список всех пожертвований.
         """
-        all_donations = await donation_crud.get_multi(self.session)
+        all_donations = await donation_crud.get_all(self.session)
         return all_donations
 
     @router.post(

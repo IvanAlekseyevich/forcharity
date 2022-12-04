@@ -32,7 +32,7 @@ class CharityProjectCBV:
         self,
     ) -> List[CharityProjectDBResponse]:
         """Возвращает список всех проектов"""
-        all_projects = await charity_project_crud.get_multi(self.session)
+        all_projects = await charity_project_crud.get_all(self.session)
         return all_projects
 
     @router.post(

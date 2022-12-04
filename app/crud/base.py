@@ -12,7 +12,7 @@ class CRUDBase:
     def __init__(self, model):
         self._model = model
 
-    async def get_multi(
+    async def get_all(
         self,
         session: AsyncSession,
     ) -> List[Union[CharityProject, Donation]]:
