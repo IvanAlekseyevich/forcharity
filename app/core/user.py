@@ -52,7 +52,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             raise InvalidPasswordException(reason="Password should not contain e-mail")
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
-        print(f"Пользователь {user.email} зарегистрирован.")
+        pass
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
