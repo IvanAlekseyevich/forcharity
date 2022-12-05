@@ -71,9 +71,7 @@ class CharityProjectCBV:
         Закрытый проект нельзя редактировать, также нельзя установить требуемую сумму меньше уже вложенной.
         """
         project = await charity_project_crud.get(project_id, self.session)
-        validators.check_charity_project_close(project)
-        await validators.check_name_duplicate(project_request, self.session)
-        validators.check_invested_before_edit(project, project_request)
+        await validators.update_charity_project(project, project_request, self.session)
         project = await charity_project_crud.update(
             project, project_request, self.session
         )
@@ -94,7 +92,6 @@ class CharityProjectCBV:
         Удаляет проект. Нельзя удалить проект, в который уже были инвестированы средства, его можно только закрыть.
         """
         project = await charity_project_crud.get(project_id, self.session)
-        validators.check_invested_before_delete(project)
-        validators.check_charity_project_close(project)
+        validators.delete_charity_project(project)
         project = await charity_project_crud.remove(project, self.session)
         return project

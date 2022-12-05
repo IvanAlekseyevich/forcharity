@@ -57,3 +57,20 @@ def check_invested_before_delete(
             status_code=400,
             detail="В проект были внесены средства, не подлежит удалению!",
         )
+
+
+async def update_charity_project(
+    project: CharityProject,
+    project_request: CharityProjectUpdateRequest,
+    session: AsyncSession,
+) -> None:
+    check_charity_project_close(project)
+    await check_name_duplicate(project_request, session)
+    check_invested_before_edit(project, project_request)
+
+
+def delete_charity_project(
+    project: CharityProject,
+) -> None:
+    check_invested_before_delete(project)
+    check_charity_project_close(project)
