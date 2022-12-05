@@ -50,7 +50,7 @@ class CharityProjectCBV:
         Только для суперюзеров.\n
         Создает благотворительный проект.
         """
-        await validators.check_name_duplicate(new_project.name, self.session)
+        await validators.check_name_duplicate(new_project, self.session)
         new_project = await charity_project_crud.create(new_project, self.session)
         await investing_sevice.investment(new_project, Donation, self.session)
         return new_project
@@ -72,7 +72,7 @@ class CharityProjectCBV:
         """
         project = await validators.get_charity_project_exists(project_id, self.session)
         validators.check_charity_project_close(project)
-        await validators.check_name_duplicate(project_request.name, self.session)
+        await validators.check_name_duplicate(project_request, self.session)
         validators.check_invested_before_edit(project, project_request)
         project = await charity_project_crud.update(
             project, project_request, self.session

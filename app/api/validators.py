@@ -1,17 +1,21 @@
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Union
 
 from app.core.models import CharityProject
 from app.crud.charity_project import charity_project_crud
-from app.schemas.charity_project import CharityProjectUpdateRequest
+from app.schemas.charity_project import (
+    CharityProjectCreateRequest,
+    CharityProjectUpdateRequest,
+)
 
 
 async def check_name_duplicate(
-    project_name: str,
+    project: Union[CharityProjectCreateRequest, CharityProjectUpdateRequest],
     session: AsyncSession,
 ) -> None:
     """Проверяет оригинальность названия проекта."""
-    project_id = await charity_project_crud.get_by_name(project_name, session)
+    project_id = await charity_project_crud.get_by_name(project.name, session)
     if project_id is not None:
         raise HTTPException(
             status_code=400,
