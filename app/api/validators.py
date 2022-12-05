@@ -64,6 +64,7 @@ async def update_charity_project(
     project_request: CharityProjectUpdateRequest,
     session: AsyncSession,
 ) -> None:
+    """Валидаторы для проверки проекта перед обновлением."""
     check_charity_project_close(project)
     await check_name_duplicate(project_request, session)
     check_invested_before_edit(project, project_request)
@@ -72,5 +73,6 @@ async def update_charity_project(
 def delete_charity_project(
     project: CharityProject,
 ) -> None:
+    """Валидаторы для проверки проекта перед удалением."""
     check_invested_before_delete(project)
     check_charity_project_close(project)
