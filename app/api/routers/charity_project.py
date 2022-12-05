@@ -73,9 +73,10 @@ class CharityProjectCBV:
         project = await validators.get_charity_project_exists(project_id, self.session)
         validators.check_charity_project_close(project)
         await validators.check_name_duplicate(project_request.name, self.session)
-        if project_request.full_amount is not None:
-            validators.check_invested_before_edit(project, project_request.full_amount)
-        project = await charity_project_crud.update(project, project_request, self.session)
+        validators.check_invested_before_edit(project, project_request)
+        project = await charity_project_crud.update(
+            project, project_request, self.session
+        )
         return project
 
     @router.delete(
