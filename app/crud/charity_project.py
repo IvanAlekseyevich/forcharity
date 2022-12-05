@@ -20,7 +20,7 @@ class CRUDCharityProject(CRUDBase):
         )
         return db_obj.scalars().first()
 
-    async def get(self, project_id: int, session: AsyncSession) -> CharityProject:
+    async def get_by_id(self, project_id: int, session: AsyncSession) -> CharityProject:
         """Возвращает объект проекта по его id, либо выбрасывает ошибку"""
         project = await self.get_or_none(project_id, session)
         if project is None:

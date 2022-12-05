@@ -70,7 +70,7 @@ class CharityProjectCBV:
         Только для суперюзеров.\n
         Закрытый проект нельзя редактировать, также нельзя установить требуемую сумму меньше уже вложенной.
         """
-        project = await charity_project_crud.get(project_id, self.session)
+        project = await charity_project_crud.get_by_id(project_id, self.session)
         await validators.update_charity_project(project, project_request, self.session)
         project = await charity_project_crud.update(
             project, project_request, self.session
@@ -91,7 +91,7 @@ class CharityProjectCBV:
         Только для суперюзеров.\n
         Удаляет проект. Нельзя удалить проект, в который уже были инвестированы средства, его можно только закрыть.
         """
-        project = await charity_project_crud.get(project_id, self.session)
+        project = await charity_project_crud.get_by_id(project_id, self.session)
         validators.delete_charity_project(project)
         project = await charity_project_crud.remove(project, self.session)
         return project
