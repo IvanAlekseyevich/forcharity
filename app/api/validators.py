@@ -1,6 +1,7 @@
+from typing import Union
+
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Union
 
 from app.core.models import CharityProject
 from app.crud.charity_project import charity_project_crud
@@ -21,17 +22,6 @@ async def check_name_duplicate(
             status_code=400,
             detail="Проект с таким именем уже существует!",
         )
-
-
-async def get_charity_project_exists(
-    project_id: int,
-    session: AsyncSession,
-) -> CharityProject:
-    """Возвращает объект проекта по его id."""
-    project = await charity_project_crud.get(project_id, session)
-    if project is None:
-        raise HTTPException(status_code=404, detail="Проект не найден!")
-    return project
 
 
 def check_charity_project_close(

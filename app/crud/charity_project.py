@@ -1,5 +1,6 @@
 from typing import Optional
 
+from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,15 +10,22 @@ from app.crud.base import CRUDBase
 
 
 class CRUDCharityProject(CRUDBase):
-    async def get(
+    async def get_or_none(
         self,
         charity_id: int,
         session: AsyncSession,
-    ) -> CharityProject:
+    ) -> Optional[CharityProject]:
         db_obj = await session.execute(
             select(self._model).where(self._model.id == charity_id)
         )
         return db_obj.scalars().first()
+
+    async def get(self, project_id: int, session: AsyncSession) -> CharityProject:
+        """Возвращает объект проекта по его id, либо выбрасывает ошибку"""
+        project = await self.get_or_none(project_id, session)
+        if project is None:
+            raise HTTPException(status_code=404, detail="Проект не найден!")
+        return project
 
     async def update(
         self,
