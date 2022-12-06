@@ -16,8 +16,8 @@ async def check_name_duplicate(
     session: AsyncSession,
 ) -> None:
     """Проверяет оригинальность названия проекта."""
-    project_id = await charity_project_crud.get_by_name(project.name, session)
-    if project_id is not None:
+    project_id = await charity_project_crud.exist_by_name(project.name, session)
+    if project_id:
         raise HTTPException(
             status_code=400,
             detail="Проект с таким именем уже существует!",
@@ -27,7 +27,7 @@ async def check_name_duplicate(
 def check_charity_project_close(
     project: CharityProject,
 ) -> None:
-    """Проверяет, закрыт ли проект."""
+    """Проверяет, закрыт проект или нет."""
     if project.fully_invested:
         raise HTTPException(
             status_code=400, detail="Закрытый проект нельзя редактировать!"
@@ -38,7 +38,7 @@ def check_invested_before_edit(
     project: CharityProject,
     project_request: CharityProjectUpdateRequest,
 ) -> None:
-    """Проверяет сумму, инвестированную в проект."""
+    """Проверяет сумму, инвестированную в проект при обновлении проекта."""
     if (
         project_request.full_amount is not None
         and project.invested_amount > project_request.full_amount
@@ -51,7 +51,7 @@ def check_invested_before_edit(
 def check_invested_before_delete(
     project: CharityProject,
 ) -> None:
-    """Проверяет сумму, инвестированную в проект."""
+    """Проверяет сумму, инвестированную в проект при удалении проекта."""
     if project.invested_amount != 0:
         raise HTTPException(
             status_code=400,

@@ -54,16 +54,15 @@ class CRUDCharityProject(CRUDBase):
         await session.commit()
         return db_obj
 
-    async def get_by_name(
+    async def exist_by_name(
         self,
         project_name: str,
         session: AsyncSession,
-    ) -> Optional[int]:
+    ) -> bool:
         db_project_id = await session.execute(
-            select(self._model.id).where(self._model.name == project_name)
+            select(select(self._model).where(self._model.name == project_name).exists())
         )
-        db_project_id = db_project_id.scalars().first()
-        return db_project_id
+        return db_project_id.scalar()
 
 
 charity_project_crud = CRUDCharityProject(CharityProject)
