@@ -45,7 +45,7 @@ alembic upgrade head
 - Запустите проект
 
 ```shell
-uvicorn app.main:app --reload
+uvicorn app.start_app:app  --reload
 ```
 
 ## Документации проекта QRKot
