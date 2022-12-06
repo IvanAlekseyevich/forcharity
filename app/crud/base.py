@@ -16,6 +16,7 @@ class CRUDBase:
         self,
         session: AsyncSession,
     ) -> List[Union[CharityProject, Donation]]:
+        """Возвращает все объекты из БД текущей модели."""
         db_objs = await session.execute(select(self._model))
         return db_objs.scalars().all()
 
@@ -25,6 +26,7 @@ class CRUDBase:
         session: AsyncSession,
         user: Optional[User] = None,
     ) -> Union[CharityProject, Donation]:
+        """Создает объект текущей модели."""
         obj_in_data = obj_in.dict()
         if user is not None:
             obj_in_data["user_id"] = user.id
@@ -38,6 +40,7 @@ class CRUDBase:
     def set_close(
         obj: Union[CharityProject, Donation]
     ) -> Union[CharityProject, Donation]:
+        """Закрывает объект и добавляет дату закрытия."""
         obj.fully_invested = True
         obj.close_date = datetime.now()
         return obj

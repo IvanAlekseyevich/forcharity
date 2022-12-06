@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,7 +12,8 @@ class CRUDDonation(CRUDBase):
         self,
         user: User,
         session: AsyncSession,
-    ):
+    ) -> List[Donation]:
+        """Возвращает все пожертвования текущего пользователя."""
         donations = await session.execute(
             select(self._model).where(self._model.user_id == user.id)
         )

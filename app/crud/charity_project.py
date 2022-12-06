@@ -15,13 +15,14 @@ class CRUDCharityProject(CRUDBase):
         charity_id: int,
         session: AsyncSession,
     ) -> Optional[CharityProject]:
+        """Возвращает объект CharityProject из БД по его id, либо возвращает None."""
         db_obj = await session.execute(
             select(self._model).where(self._model.id == charity_id)
         )
         return db_obj.scalars().first()
 
     async def get_by_id(self, project_id: int, session: AsyncSession) -> CharityProject:
-        """Возвращает объект проекта по его id, либо выбрасывает ошибку"""
+        """Возвращает объект CharityProject по его id, либо выбрасывает ошибку"""
         project = await self.get_or_none(project_id, session)
         if project is None:
             raise HTTPException(status_code=404, detail="Проект не найден!")
@@ -33,6 +34,7 @@ class CRUDCharityProject(CRUDBase):
         obj_in,
         session: AsyncSession,
     ) -> CharityProject:
+        """Обновляет объект CharityProject и возвращает обновленный объект."""
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict()
         for field in obj_data:
@@ -50,6 +52,7 @@ class CRUDCharityProject(CRUDBase):
         db_obj: CharityProject,
         session: AsyncSession,
     ) -> CharityProject:
+        """Удаляет объект CharityProject по его id."""
         await session.delete(db_obj)
         await session.commit()
         return db_obj
@@ -59,6 +62,7 @@ class CRUDCharityProject(CRUDBase):
         project_name: str,
         session: AsyncSession,
     ) -> bool:
+        """Проверяет существование полученного имени в БД, возвращает True/False."""
         db_project_id = await session.execute(
             select(select(self._model).where(self._model.name == project_name).exists())
         )
