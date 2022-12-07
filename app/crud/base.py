@@ -35,12 +35,3 @@ class CRUDBase:
         await session.commit()
         await session.refresh(db_obj)
         return db_obj
-
-    @staticmethod
-    def set_close(
-        obj: Union[CharityProject, Donation]
-    ) -> Union[CharityProject, Donation]:
-        """Закрывает объект и добавляет дату закрытия."""
-        obj.fully_invested = True
-        obj.close_date = datetime.now()
-        return obj
