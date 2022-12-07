@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from sqlalchemy import (
     Boolean,
     Column,
@@ -6,8 +7,6 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     Text,
-    TIMESTAMP,
-    func,
 )
 
 from app.core.models.base import Base
