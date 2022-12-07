@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,7 +10,7 @@ from app.core.services import close_service
 def reinvestment(
     new_obj: Union[CharityProject, Donation],
     open_obj: Union[CharityProject, Donation],
-) -> List[Union[CharityProject, Donation]]:
+):
     """Перераспределяет средства между проектами и пожертвованиями."""
     to_close_new_obj = new_obj.full_amount - new_obj.invested_amount
     to_close_open_obj = open_obj.full_amount - open_obj.invested_amount
