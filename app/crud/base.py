@@ -4,8 +4,8 @@ from typing import List, Optional, Union
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.models import CharityProject, Donation
-from app.core.models import User
+from app.core.models import CharityProject, Donation, User
+from app.core.services import set_user_service
 
 
 class CRUDBase:
@@ -22,15 +22,12 @@ class CRUDBase:
 
     async def create(
         self,
-        obj_in,
+        request_obj,
         session: AsyncSession,
         user: Optional[User] = None,
     ) -> Union[CharityProject, Donation]:
         """Создает объект текущей модели."""
-        obj_in_data = obj_in.dict()
-        if user is not None:
-            obj_in_data["user_id"] = user.id
-        db_obj = self._model(**obj_in_data)
+        db_obj = set_user_service.set_user(request_obj, self._model, user)
         session.add(db_obj)
         await session.commit()
         await session.refresh(db_obj)
