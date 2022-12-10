@@ -4,7 +4,7 @@ from conftest import (
 )
 from fastapi.testclient import TestClient
 
-from app.models.user import User
+from app.core.models.user import User
 
 superuser = User(
     id=1,

@@ -8,19 +8,19 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 try:
-    from app.main import app
+    from app.start_app import app
 except (NameError, ImportError):
     raise AssertionError(
         'Не обнаружен объект приложения `app`.'
-        'Проверьте и поправьте: он должен быть доступен в модуле `app.main`.',
+        'Проверьте и поправьте: он должен быть доступен в модуле `app.start_app`.',
     )
 
 try:
-    from app.core.db import Base, get_async_session
+    from app.core.models.base import Base, get_async_session
 except (NameError, ImportError):
     raise AssertionError(
         'Не обнаружены объекты `Base, get_async_session`. '
-        'Проверьте и поправьте: они должны быть доступны в модуле `app.core.db`.',
+        'Проверьте и поправьте: они должны быть доступны в модуле `app.core.models`.',
     )
 
 try:

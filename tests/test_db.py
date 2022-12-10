@@ -8,11 +8,11 @@ except (NameError, ImportError):
         pass
 
 try:
-    from app.core.config import Settings
+    from app.core.settings import Settings
 except (NameError, ImportError):
     raise AssertionError(
         'Не обнаружен объект настроек приложения `Settings`.'
-        'Проверьте и поправьте: он должен быть доступен в модуле `app.core.config`.',
+        'Проверьте и поправьте: он должен быть доступен в модуле `start_app.core.config`.',
     )
 
 
